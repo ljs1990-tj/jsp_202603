@@ -29,6 +29,7 @@
 	<%@ include file="../../db.jsp" %>
 	<% 
 		String sessionId = (String) session.getAttribute("sessionId");
+		String sessionRole = (String) session.getAttribute("sessionRole");
 		String keyword = request.getParameter("keyword");	
 		String kind = request.getParameter("kind");	
 		kind = kind != null ? kind : "";
@@ -58,6 +59,7 @@
 			<th>작성자</th>
 			<th>조회수</th>
 			<th>작성일</th>
+			<th>삭제</th>
 		</tr>
 	<%	
 		
@@ -77,6 +79,7 @@
 		
 		ResultSet rs = stmt.executeQuery(sql);
 		while(rs.next()){
+			String userId = rs.getString("USERID");
 	%>
 			<tr>
 				<td><%= rs.getString("BOARDNO") %></td>
@@ -84,6 +87,11 @@
 				<td><%= rs.getString("USERID") %></td>
 				<td><%= rs.getString("CNT") %></td>
 				<td><%= rs.getString("CDATE") %></td>
+				<td>
+					<% if(sessionId.equals(userId) || sessionRole.equals("A")){ %>
+						<input type="button" value="삭제" onclick="fnRemove(<%= rs.getString("BOARDNO") %>)">
+					<% } %>
+				</td>
 			</tr>	
 	<%		
 		}
@@ -114,6 +122,9 @@
 		document.form.submit();
 	}
 	
+	function fnRemove(boardNo){
+		location.href = "board-remove.jsp?boardNo="+boardNo;
+	}
 </script>
 
 
