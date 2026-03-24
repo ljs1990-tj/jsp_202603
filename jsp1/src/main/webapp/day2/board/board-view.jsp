@@ -27,6 +27,19 @@
 	.btn-area {
 		margin-top : 5px;
 	}
+	.line {
+		margin: 30px 0px;
+    	border-bottom: 1px solid #aaa;
+	}
+	.comment-area {
+		margin-bottom : 500px;
+	}
+	.comment-area th {
+		width : 100px;
+	}
+	.comment-area td {
+		width : 550px;
+	}
 </style>
 </head>
 <body>
@@ -87,6 +100,37 @@
 	 %>
 		<input type="button" value="되돌아가기">
 	</div>
+	<div class="line">
+	</div>
+	<div class="comment-area">
+		<table>
+		<%
+			sql = "SELECT * FROM TBL_COMMENT WHERE BOARDNO = " + boardNo 
+				+ " ORDER BY CDATETIME ASC";
+			rs = stmt.executeQuery(sql);
+			while(rs.next()){
+		%>
+			<tr>
+				<th><%= rs.getString("USERID") %></th>
+				<td><%= rs.getString("CONTENTS") %></td>
+			</tr>
+		<%		
+			}
+		%>
+		</table>
+		<br>
+		<table>
+			<tr>
+				<th>댓글 등록</th>
+				<td style="width : 470px; border-right: none;">
+					<textarea name="contents" cols="65" rows="5"></textarea>
+				</td>
+				<td style="width : 50px; border-left: none;">
+					<input type="button" value="등록" onclick="fnCommentAdd()">
+				</td>
+			<tr>
+		</table>
+	</div>
 </form>
 </body>
 </html>
@@ -103,6 +147,11 @@
 		form.action = "board-remove.jsp";
 		form.submit(); */
 			
+	}
+	function fnCommentAdd(){
+		let form = document.form;
+		form.action = "board-comment-add.jsp";
+		form.submit();
 	}
 </script>
 

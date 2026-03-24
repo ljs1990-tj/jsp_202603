@@ -116,7 +116,10 @@
 		%>
 		</table>
 		<div class="paging-area">
-			<a href="javascript:;">◀</a>
+			<% if(currentPage != 1){ %>
+				<a href="?page=<%= currentPage-1 %>&pageSize=<%= pageSize %>">◀</a>
+			<% } %>
+			
 			<%
 				for(int i=1; i<=pageList; i++){
 			%>
@@ -124,7 +127,10 @@
 			<%		
 				}
 			%>
-			<a href="javascript:;">▶</a>
+			
+			<% if(currentPage != pageList){ %>
+				<a href="?page=<%= currentPage+1 %>&pageSize=<%= pageSize %>">▶</a>
+			<% } %>
 		</div>
 	</form>
 </div>
