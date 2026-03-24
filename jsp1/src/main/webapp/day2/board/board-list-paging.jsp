@@ -48,15 +48,22 @@
 </head>
 <body>
 <div id="container">
-	<form action="board-list.jsp" name="form">
+	<form action="board-list-paging.jsp" name="form">
 		<%@ include file="../../db.jsp" %>
+		<%
+			int pageSize = 5;
+			if(request.getParameter("pageSize") != null){
+				pageSize = Integer.parseInt(request.getParameter("pageSize"));
+			}
+			
+		%>
 		<div class="select-area">
-			<select>
+			<select name="pageSize" onchange="fnPageSize()">
 				<%
 					int arr[] = {3, 5, 10, 15, 20};
 					for(int i=0; i<arr.length; i++){
 				%>
-						<option value="<%= arr[i] %>"> <%= arr[i] %> 개씩 </option>
+						<option value="<%= arr[i] %>" <%= pageSize == arr[i] ? "selected" : "" %>> <%= arr[i] %> 개씩 </option>
 				<%		
 					}
 				%>
@@ -77,13 +84,13 @@
 			);	
 			rsCnt.next();
 			int total = rsCnt.getInt("TOTAL");
-			int pageList = (int) Math.ceil((double) total / 5);
+			int pageList = (int) Math.ceil((double) total / pageSize);
 			
 			int currentPage = 1;
 			if(request.getParameter("page") != null){
 				currentPage = Integer.parseInt(request.getParameter("page"));
 			}
-			int offset = (currentPage - 1) * 5;
+			int offset = (currentPage - 1) * pageSize;
 			
 			String sql = "SELECT B.*, TO_CHAR(CDATETIME, 'YYYY-MM-DD') AS CDATE "
 						+ "FROM TBL_BOARD B WHERE 1=1 ";
@@ -91,7 +98,7 @@
 				sql += "ORDER BY BOARDNO ASC ";	
 			}
 			if(true){
-				sql += "OFFSET " + offset + " ROWS FETCH NEXT 5 ROWS ONLY";
+				sql += "OFFSET " + offset + " ROWS FETCH NEXT " +  pageSize  + " ROWS ONLY";
 			}
 			
 			ResultSet rs = stmt.executeQuery(sql);
@@ -109,19 +116,24 @@
 		%>
 		</table>
 		<div class="paging-area">
+			<a href="javascript:;">◀</a>
 			<%
 				for(int i=1; i<=pageList; i++){
 			%>
-				<a href="?page=<%= i %>"> <%= i %> </a>
+				<a href="?page=<%= i %>&pageSize=<%= pageSize %>" class="<%= currentPage == i ? "active" : "" %>"> <%= i %> </a>
 			<%		
 				}
 			%>
+			<a href="javascript:;">▶</a>
 		</div>
 	</form>
 </div>
 </body>
 </html>
 <script>
+	function fnPageSize(){
+		document.form.submit();
+	}
 </script>
 
 
