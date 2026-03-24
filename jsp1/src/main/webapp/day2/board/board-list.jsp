@@ -15,23 +15,41 @@
 		border-collapse: collapse;
 		text-align: center;
 	}
+	th {
+		background-color: #eee;
+	}
 	.search-area {
 		margin : 10px 0px;
 	}
+	
 </style>
 </head>
 <body>
-<form action="board-list.jsp">
+<form action="board-list.jsp" name="form">
 	<%@ include file="../../db.jsp" %>
 	<% 
+		String sessionId = (String) session.getAttribute("sessionId");
 		String keyword = request.getParameter("keyword");	
+		String kind = request.getParameter("kind");	
+		kind = kind != null ? kind : "";
 	%>
 	<!-- board-list.jsp -->
+	<div class="session-info">
+		<div>현재 로그인한 사용자 : <%= sessionId %></div>
+	</div>
 	<div class="search-area">
 		<label>검색어 : 
 		<input name="keyword" 
 			   value="<%= keyword != null ? keyword : ""  %>"></label>
 		<input type="submit" value="검색">
+		
+		<select name="kind" onchange="fnKind(this.value)">
+			<option value="">:: 전체 ::</option>
+			<option value="1" <%= kind.equals("1") ? "selected" : "" %>>공지 사항</option>
+			<option value="2" <%= kind.equals("2") ? "selected" : "" %>>자유게시판</option>
+			<option value="3" <%= kind.equals("3") ? "selected" : "" %>>문의게시판</option>
+		</select>
+		
 	</div>
 	<table>
 		<tr>
@@ -46,7 +64,15 @@
 		String sql = "SELECT B.*, TO_CHAR(CDATETIME, 'YYYY-MM-DD') AS CDATE "
 					+ "FROM TBL_BOARD B WHERE 1=1 ";
 		if(keyword != null){
-			sql += "AND TITLE LIKE '%" + keyword + "%'";
+			sql += "AND TITLE LIKE '%" + keyword + "%' ";
+		}
+		
+		if(kind != null && !kind.equals("")){
+			sql += "AND KIND = " + kind + " ";
+		}
+		
+		if(true){
+			sql += "ORDER BY BOARDNO ASC ";	
 		}
 		
 		ResultSet rs = stmt.executeQuery(sql);
@@ -79,6 +105,15 @@
 	function fnView(boardNo){
 		location.href = "board-view.jsp?boardNo=" + boardNo;
 	}
+	
+	function fnKind(v){
+		/* 
+			let form = document.form;
+			form.submit(); 
+		*/
+		document.form.submit();
+	}
+	
 </script>
 
 

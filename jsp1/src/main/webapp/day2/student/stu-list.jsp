@@ -19,6 +19,19 @@
 </head>
 <body>
 	<%@ include file="../../db.jsp" %>
+<form action="stu-list.jsp" name="form">	
+	<%
+		String dept = request.getParameter("dept");
+		dept = dept != null ? dept : "";
+	%>
+	<div>
+		<select name="dept" onchange="fnDept()">
+			<option value="">:: 전체 ::</option>
+			<option value="기계" <%= dept.equals("기계") ? "selected" : "" %>>기계</option>
+			<option value="전기전자" <%= dept.equals("전기전자") ? "selected" : "" %>>전기전자</option>
+			<option value="컴퓨터정보" <%= dept.equals("컴퓨터정보") ? "selected" : "" %>>컴퓨터정보</option>
+		</select>
+	</div>
 	<table>
 		<tr>
 			<th>학번</th>
@@ -27,7 +40,10 @@
 			<th>학년</th>
 		</tr>
 	<%
-		String sql = "SELECT * FROM STUDENT";
+		String sql = "SELECT * FROM STUDENT WHERE 1=1 ";
+		if(dept != null && !dept.equals("")){
+			sql += "AND STU_DEPT = '" + dept + "'"; 
+		}
 		ResultSet rs = stmt.executeQuery(sql);
 		while(rs.next()){
 	%>
@@ -44,8 +60,14 @@
 	<div>
 		<a href="stu-add.jsp"><input type="button" value="학생추가"></a>
 	</div>
+</form>
 </body>
 </html>
+<script>
+	function fnDept(){
+		document.form.submit();
+	}
+</script>
 
 
 

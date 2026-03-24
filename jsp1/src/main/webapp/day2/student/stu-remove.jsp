@@ -10,7 +10,7 @@
 	<%@ include file="../../db.jsp" %>
 	<%
 		String stuNo = request.getParameter("stuNo");
-		String sql = "DELETE FROM STUDENT WHERE STU_NO = " + stuNo;
+		String sql = "DELETE FROM STUDENT WHERE STU_NO = '" + stuNo + "'";
 		
 		int result = stmt.executeUpdate(sql);
 		if(result > 0){

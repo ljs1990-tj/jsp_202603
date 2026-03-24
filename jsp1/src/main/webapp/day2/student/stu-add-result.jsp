@@ -23,7 +23,7 @@
 		int result = stmt.executeUpdate(sql);
 		if(result > 0){
 			/* out.println("추가되었습니다.!"); */
-			response.sendRedirect("stu-list.jsp");
+			/* response.sendRedirect("stu-list.jsp"); */
 		} else {
 			out.println("에러 발생!");
 		}

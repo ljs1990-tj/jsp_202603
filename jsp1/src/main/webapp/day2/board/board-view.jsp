@@ -32,7 +32,9 @@
 <body>
 <%@ include file="../../db.jsp" %>
 <form action="" name="form">
-	<%
+	<%	
+		String sessionId = (String) session.getAttribute("sessionId");
+		String sessionRole = (String) session.getAttribute("sessionRole");
 		String boardNo = request.getParameter("boardNo");
 	%>
 	<input name="boardNo" value="<%= boardNo %>" hidden>
@@ -45,7 +47,9 @@
 		
 		sql = "SELECT * FROM TBL_BOARD WHERE BOARDNO = " + boardNo;
 		ResultSet rs = stmt.executeQuery(sql);
+		String userId = "";
 		if(rs.next()){
+			userId = rs.getString("USERID");
 	%>
 		<tr>
 			<th>제목</th>
@@ -73,8 +77,14 @@
 	%>
 	</table>
 	<div class="btn-area">
+	<%
+		if(userId.equals(sessionId) || sessionRole.equals("A")){
+	%>
 		<input type="button" value="수정" onclick="fnEdit()">
 		<input type="button" value="삭제" onclick="fnRemove()">
+	<%		
+		}
+	 %>
 		<input type="button" value="되돌아가기">
 	</div>
 </form>
