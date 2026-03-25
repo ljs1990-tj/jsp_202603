@@ -179,10 +179,3 @@
 		document.form.submit();
 	}
 </script>
-
-
-
-
-
-
-

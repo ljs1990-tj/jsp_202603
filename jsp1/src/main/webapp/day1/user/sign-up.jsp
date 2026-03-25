@@ -10,6 +10,7 @@
 	<form action="sign-up-result.jsp" name="signUp">
 		<div>
 			<label>아이디 : <input name="userId"></label>
+			<input type="button" value="중복체크">
 		</div>
 		<div>
 			<label>비밀번호 : <input name="pwd1" type="password"></label>
